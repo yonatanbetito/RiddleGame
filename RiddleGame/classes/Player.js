@@ -17,10 +17,8 @@ export class Player {
 
     let average = total / this.timeList.length;
     return {
-      total: (total/1000).toFixed(2),
-      average: (average/1000).toFixed(2),
+      total: (total / 1000).toFixed(2),
+      average: (average / 1000).toFixed(2),
     };
   }
 }
-
-
