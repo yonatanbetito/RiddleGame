@@ -1,7 +1,7 @@
 import readlineSync from "readline-sync";
 import { Player } from "./classes/Player.js";
 import { Riddle } from "./classes/Riddle.js";
-import r1 from "./Riddles/r1.js";
+import r1 from "./riddles/r1.js";
 
 const name = readlineSync.question("enter your name: ");
 const player = new Player(name);
