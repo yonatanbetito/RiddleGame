@@ -6,12 +6,20 @@ export class Riddle {
     this.taskDescription = taskDescription;
     this.correctAnswer = correctAnswer;
   }
+  //מקבל תשובה ובודק אם תואם לדאטה ומחזיר
   ask() {
-    do {
-      const response = readlineSync.question("enter your response: ");
-      if (response == this.correctAnswer) {
+    let response;
+
+    while (response !== this.correctAnswer) {
+      response = readlineSync.question("Enter your response: ");
+      if (response === this.correctAnswer) {
+        console.log("Correct!");
+        console.log("");
         return true;
+      } else {
+        console.log("Try again.");
+        console.log("");
       }
-    } while (true);
+    }
   }
 }
