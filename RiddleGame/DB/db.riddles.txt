@@ -1,0 +1,25 @@
+[
+  {
+    "id": 1,
+    "name": "Easy Math",
+    "taskDescription": "What is 5 + 3?",
+    "correctAnswer": "8"
+  },
+  {
+    "id": 2,
+    "name": "Riddle of Sound",
+    "taskDescription": "I speak without a mouth. What am I?",
+    "correctAnswer": "echo"
+  },
+  {
+    "id": 3,
+    "name": "hard",
+    "taskDescription": "Im full of keys but cant open any doors. What am I?",
+    "correctAnswer": "keyboard"
+  },
+  {
+    "id": 5,
+    "name": "hard",
+    "taskDescription": "34*32"
+  }
+]
