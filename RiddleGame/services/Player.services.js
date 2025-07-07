@@ -1,26 +1,40 @@
-export class Player {
-  constructor(name) {
-    this.name = name;
-    this.timeList = [];
-  }
-  //קולט זמן התחלה וסיום ומכניס לרשימה
-  recordTime(start, end) {
-    let sumTime = end - start;
-    this.timeList.push(sumTime);
-    return sumTime;
-  }
+import { Player } from "../modeles/Player.js";
+import { getAllPlayers, createPlayer } from "../data-access/players.dal.js";
 
-  //מראה לי את הנתונים (סהכ זמן או ממוצע חידה)
-  showStats() {
-    let total = 0;
-    for (let i = 0; i < this.timeList.length; i++) {
-      total += this.timeList[i];
+
+async function getLeaderboard() {
+  try {
+    const players = await getAllPlayers();
+    console.log("Leaderboard:");
+    for (let i = 0; i < players.length; i++) {
+      console.log(`${i + 1}. ${players[i].name}`);
     }
-
-    let average = total / this.timeList.length;
-    return {
-      total: (total / 1000).toFixed(2),
-      average: (average / 1000).toFixed(2),
-    };
+    return players;
+  } catch (err) {
+    console.log("error:", err.message);
+    return [];
   }
 }
+
+async function savePlayerResult(playerName, gameStats) {
+  try {
+    const players = await getAllPlayers();
+    let newId = 1;
+    if (players.length > 0) {
+      newId = players[players.length - 1].id + 1;
+    }
+
+    const playerData = {
+      id: newId,
+      name: playerName,
+      totalTime: gameStats.total,
+      averageTime: gameStats.average,
+    };
+
+    await createPlayer(playerData);
+  } catch (err) {
+    console.log("error:", err.message);
+  }
+}
+
+export { Player, getLeaderboard, savePlayerResult };

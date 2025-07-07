@@ -1,8 +1,10 @@
-[{
-    "id":1,
-    "name":"yoni"
-},
-{
-    "id":2,
-    "name":"avi"
-}]
+[
+  {
+    "id": 1,
+    "name": "yoni"
+  },
+  {
+    "id": 2,
+    "name": "avi"
+  }
+]

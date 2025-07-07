@@ -1,20 +1,17 @@
 import readlineSync from "readline-sync";
-import r1 from "./riddles/r1.js";
-import r2 from "./riddles/r2.js";
-import r3 from "./riddles/r3.js";
-import { Player } from "./services/Player.services.js";
-import { Riddle } from "./services/Riddle.services.js";
-import db from "./data-access/read.js";
-import create from "./data-access/create.js";
-import updateById from "./data-access/update.js";
-import deleteById from "./data-access/delete.js";
+import { getLeaderboard } from "./services/Player.services.js";
+import {
+  getAllRiddles,
+  createRiddle,
+  updateRiddle,
+  deleteRiddle,
+} from "./services/Riddle.services.js";
+import startGame from "./services/Game.services.js";
 
-//ייבוא של החידות
-const riddles = [r1, r2, r3];
-
-console.log("menu");
-console.log(
-  `What do you want to do?
+async function main() {
+  console.log("menu");
+  console.log(
+    `What do you want to do?
 1. Play the game
 2. Create a new riddle
 3. Read all riddles
@@ -22,44 +19,66 @@ console.log(
 5. Delete a riddle
 6. View leaderboard
 `
-);
-const operation = readlineSync.question("Enter operation 1-4: ");
-switch (operation) {
-  case "1":
-    console.log("Starting the game...");
-    const name = readlineSync.question("enter your name: ");
-    const player = new Player(name);
-    //ללואה שמריצה את החידות
-    for (let i = 0; i < riddles.length; i++) {
-      const riddle = new Riddle(riddles[i]);
-      console.log(`\nRiddle ${i + 1}:`);
-      console.log(riddle.taskDescription);
-      const startTime = Date.now();
-      riddle.ask();
-      const endTime = Date.now();
-      player.recordTime(startTime, endTime);
-    }
-    //הצגת הנתונים והדפסה
-    const stats = player.showStats();
-    console.log(`Great job ${player.name}, you finished the game!`);
-    console.log(`Total time: ${stats.total}`);
-    console.log(`Average per riddle: ${stats.average}`);
-    break;
-  case "2":
-    create();
-    break;
-  case "3":
-    db();
-    break;
-  case "4":
-    updateById();
-    break;
-  case "5":
-    deleteById();
-    break;
-  case "6":
-    console.log("Viewing leaderboard...");
-    break;
-  default:
-    console.log("Invalid operation. Please try again.");
+  );
+  const operation = readlineSync.question("Enter operation 1-6: ");
+  switch (operation) {
+    case "1":
+      console.log("Starting the game...");
+      const name = readlineSync.question("enter your name: ");
+      await startGame(name);
+      break;
+    case "2":
+      const riddleId = readlineSync.question("Enter riddle ID: ");
+      const riddleName = readlineSync.question("Enter riddle name: ");
+      const riddleTask = readlineSync.question("Enter riddle description: ");
+      const riddleAnswer = readlineSync.question("Enter correct answer: ");
+
+      const newRiddle = {
+        id: parseInt(riddleId),
+        name: riddleName,
+        taskDescription: riddleTask,
+        correctAnswer: riddleAnswer,
+      };
+
+      await createRiddle(newRiddle);
+      break;
+    case "3":
+      const riddles = await getAllRiddles();
+      riddles.forEach((riddle) => {
+        console.log(`ID: ${riddle.id}, Name: ${riddle.name}`);
+        console.log(`Description: ${riddle.taskDescription}`);
+        console.log(`Answer: ${riddle.correctAnswer}\n`);
+      });
+      break;
+    case "4":
+      const updateId = readlineSync.question("Enter riddle ID to update: ");
+      const updatedRiddleName = readlineSync.question(
+        "Enter new name: "
+      );
+      const updatedTask = readlineSync.question(
+        "Enter new description: "
+      );
+      const updatedAnswer = readlineSync.question("Enter new answer: ");
+
+      const updatedRiddle = {
+        id: parseInt(updateId),
+        name: updatedRiddleName,
+        taskDescription: updatedTask,
+        correctAnswer: updatedAnswer,
+      };
+
+      await updateRiddle(updateId, updatedRiddle);
+      break;
+    case "5":
+      const deleteId = readlineSync.question("Enter riddle ID to delete: ");
+      await deleteRiddle(deleteId);
+      break;
+    case "6":
+      await getLeaderboard();
+      break;
+    default:
+      console.log("Invalid operation.");
+  }
 }
+
+main().catch(console.error);

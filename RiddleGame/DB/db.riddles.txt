@@ -18,8 +18,9 @@
     "correctAnswer": "keyboard"
   },
   {
-    "id": 5,
-    "name": "hard",
-    "taskDescription": "34*32"
+    "id": 3,
+    "name": "easy",
+    "taskDescription": "10*5",
+    "correctAnswer": "50"
   }
 ]
